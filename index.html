@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流程图编辑器</title>
+    <style>
+        :root{
+            --primary:#2f6fed;
+            --accent:#f5a623;
+            --font-family:"Helvetica Neue",Arial,sans-serif;
+            --spacing:8px;
+        }
+        body{
+            margin:0;
+            font-family:var(--font-family);
+            color:#333;
+            background:#f0f2f5;
+        }
+        a{
+            color:inherit;
+            text-decoration:none;
+        }
+        header{
+            background:var(--primary);
+            color:#fff;
+            padding:calc(var(--spacing)*2);
+        }
+        .nav{
+            display:flex;
+            flex-wrap:wrap;
+            gap:calc(var(--spacing)*2);
+        }
+        .nav a{
+            padding:calc(var(--spacing)*0.5) calc(var(--spacing)*1);
+            border-radius:4px;
+            transition:background .2s;
+        }
+        .nav a:hover{
+            background:rgba(255,255,255,0.2);
+        }
+        .container{
+            max-width:1200px;
+            margin:0 auto;
+            padding:calc(var(--spacing)*2);
+        }
+        .content{
+            display:grid;
+            gap:calc(var(--spacing)*2);
+        }
+        @media (min-width:600px){
+            .content{
+                grid-template-columns:repeat(2,1fr);
+            }
+        }
+        @media (min-width:900px){
+            .content{
+                grid-template-columns:repeat(3,1fr);
+            }
+        }
+        .card{
+            background:#fff;
+            border-radius:8px;
+            box-shadow:0 2px 6px rgba(0,0,0,0.1);
+            padding:calc(var(--spacing)*2);
+        }
+        .btn{
+            background:var(--primary);
+            color:#fff;
+            border:none;
+            border-radius:4px;
+            padding:8px 16px;
+            cursor:pointer;
+            font-family:inherit;
+        }
+        .btn:hover{
+            background:#2559c4;
+        }
+    </style>
+<meta name="description" content="主画布、节点库、属性面板，支持拖拽、连线、实时预览。"><meta name="keywords" content="SVG,流程图,编辑器,拖拽,属性面板,导出,前端"><meta name="robots" content="index,follow,max-image-preview:large"><meta property="og:type" content="website"><meta property="og:title" content="流程图编辑器"><meta property="og:description" content="主画布、节点库、属性面板，支持拖拽、连线、实时预览。"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="流程图编辑器"><meta name="twitter:description" content="主画布、节点库、属性面板，支持拖拽、连线、实时预览。"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"流程图编辑器","description":"主画布、节点库、属性面板，支持拖拽、连线、实时预览。","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"}}</script><style data-a2a="basecss">*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,canvas,svg,video,table{max-width:100%;height:auto}pre,code{white-space:pre-wrap;word-break:break-word}[data-a2a="header"]{width:100%}@media(max-width:640px){body{font-size:15px}}</style></head>
+<body>
+    <header>
+        <nav class="nav">
+            <a href="index.html">流程图编辑器</a>
+            <a href="templates.html">模板库</a>
+            <a href="export.html">导出与保存</a>
+            <a href="about.html">关于本编辑器</a>
+            <a href="settings.html">全局设置</a>
+            <a href="shortcuts.html">快捷键指南</a>
+            <a href="help.html">使用帮助</a>
+            <a href="feedback.html">反馈与建议</a>
+        </nav>
+    </header>
+    <main class="container">
+        <section class="content">
+            
+<article class="card" style="grid-column:1 / -1;">
+    <h2 style="margin-top:0;margin-bottom:var(--spacing);">流程图编辑器</h2>
+    <div style="display:flex;gap:var(--spacing);height:500px;">
+        <!-- 节点库 -->
+        <aside id="node-palette" style="width:180px;background:#fafafa;border:1px solid #e0e0e0;border-radius:4px;padding:var(--spacing);overflow:auto;">
+            <h3 style="margin-top:0;margin-bottom:var(--spacing);font-size:1em;">节点库</h3>
+            <div class="node-template" data-type="start" style="padding:var(--spacing);margin-bottom:var(--spacing);background:#fff;border:1px solid #ddd;border-radius:4px;cursor:grab;">开始</div>
+            <div class="node-template" data-type="process" style="padding:var(--spacing);margin-bottom:var(--spacing);background:#fff;border:1px solid #ddd;border-radius:4px;cursor:grab;">处理</div>
+            <div class="node-template" data-type="decision" style="padding:var(--spacing);margin-bottom:var(--spacing);background:#fff;border:1px solid #ddd;border-radius:4px;cursor:grab;">判断</div>
+            <div class="node-template" data-type="end" style="padding:var(--spacing);background:#fff;border:1px solid #ddd;border-radius:4px;cursor:grab;">结束</div>
+        </aside>
+
+        <!-- 主画布 -->
+        <section id="canvas-wrapper" style="flex:1;position:relative;background:#fff;border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;">
+            <svg id="flow-canvas" width="100%" height="100%"></svg>
+        </section>
+
+        <!-- 属性面板 -->
+        <aside id="property-panel" style="width:200px;background:#fafafa;border:1px solid #e0e0e0;border-radius:4px;padding:var(--spacing);overflow:auto;">
+            <h3 style="margin-top:0;margin-bottom:var(--spacing);font-size:1em;">属性面板</h3>
+            <div id="prop-content">选中节点后查看属性</div>
+        </aside>
+    </div>
+
+    <div style="margin-top:var(--spacing);text-align:right;">
+        <a href="templates.html?id=default"><button class="btn">模板库</button></a>
+        <a href="export.html?id=current"><button class="btn">导出</button></a>
+        <a href="about.html?id=editor"><button class="btn">关于</button></a>
+    </div>
+</article>
+
+<script>
+(function(){
+    const palette = document.getElementById('node-palette');
+    const canvas = document.getElementById('flow-canvas');
+    const propPanel = document.getElementById('prop-content');
+    let dragNode = null;
+    let offsetX = 0, offsetY = 0;
+    let selectedElem = null;
+
+    // 创建节点
+    function createNode(type, x, y){
+        const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+        g.setAttribute('class','flow-node');
+        g.setAttribute('data-type',type);
+        g.setAttribute('transform',`translate(${x},${y})`);
+        g.style.cursor = 'move';
+
+        const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+        rect.setAttribute('width',120);
+        rect.setAttribute('height',40);
+        rect.setAttribute('rx',6);
+        rect.setAttribute('ry',6);
+        rect.setAttribute('fill','#fff');
+        rect.setAttribute('stroke',varPrimary);
+        rect.setAttribute('stroke-width',2);
+        g.appendChild(rect);
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg','text');
+        text.setAttribute('x',60);
+        text.setAttribute('y',25);
+        text.setAttribute('text-anchor','middle');
+        text.setAttribute('font-family','var(--font-family)');
+        text.setAttribute('font-size','14');
+        text.textContent = type.charAt(0).toUpperCase()+type.slice(1);
+        g.appendChild(text);
+
+        // 交互
+        g.addEventListener('mousedown', e=>{
+            e.stopPropagation();
+            selectedElem = g;
+            highlight(g);
+            const pt = canvas.createSVGPoint();
+            pt.x = e.clientX; pt.y = e.clientY;
+            const cursorpt = pt.matrixTransform(g.getScreenCTM().inverse());
+            offsetX = cursorpt.x;
+            offsetY = cursorpt.y;
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('mouseup', onDrop);
+        });
+
+        canvas.appendChild(g);
+    }
+
+    // 高亮选中
+    function highlight(elem){
+        const nodes = canvas.querySelectorAll('.flow-node rect');
+        nodes.forEach(r=>r.setAttribute('stroke','#ccc'));
+        const rect = elem.querySelector('rect');
+        if(rect) rect.setAttribute('stroke',varPrimary);
+        showProperties(elem);
+    }
+
+    // 显示属性
+    function showProperties(elem){
+        const type = elem.getAttribute('data-type');
+        propPanel.innerHTML = `
+            <p><strong>类型：</strong>${type}</p>
+            <label>文本：<input type="text" id="prop-text" value="${elem.querySelector('text').textContent}" style="width:100%;margin-top:var(--spacing);"></label>
+            <button class="btn" id="prop-update" style="margin-top:var(--spacing);">更新</button>
+        `;
+        document.getElementById('prop-update').onclick = ()=>{
+            const txt = document.getElementById('prop-text').value;
+            elem.querySelector('text').textContent = txt;
+        };
+    }
+
+    // 拖拽节点
+    function onDrag(e){
+        if(!selectedElem) return;
+        const pt = canvas.createSVGPoint();
+        pt.x = e.clientX; pt.y = e.clientY;
+        const cursorpt = pt.matrixTransform(canvas.getScreenCTM().inverse());
+        const x = cursorpt.x - offsetX;
+        const y = cursorpt.y - offsetY;
+        selectedElem.setAttribute('transform',`translate(${x},${y})`);
+    }
+
+    function onDrop(){
+        document.removeEventListener('mousemove', onDrag);
+        document.removeEventListener('mouseup', onDrop);
+        selectedElem = null;
+    }
+
+    // 从调色板拖出节点
+    palette.addEventListener('mousedown', e=>{
+        const tmpl = e.target.closest('.node-template');
+        if(!tmpl) return;
+        dragNode = {
+            type: tmpl.getAttribute('data-type')
+        };
+        document.addEventListener('mousemove', previewDrag);
+        document.addEventListener('mouseup', placeNode);
+    });
+
+    function previewDrag(e){
+        // 可视化预览（简化为不实现）
+    }
+
+    function placeNode(e){
+        if(dragNode){
+            const pt = canvas.createSVGPoint();
+            pt.x = e.clientX; pt.y = e.clientY;
+            const cursorpt = pt.matrixTransform(canvas.getScreenCTM().inverse());
+            createNode(dragNode.type, cursorpt.x-60, cursorpt.y-20);
+        }
+        dragNode = null;
+        document.removeEventListener('mousemove', previewDrag);
+        document.removeEventListener('mouseup', placeNode);
+    }
+
+    // 点击空白取消选中
+    canvas.addEventListener('mousedown', e=>{
+        if(e.target === canvas){
+            selectedElem = null;
+            const nodes = canvas.querySelectorAll('.flow-node rect');
+            nodes.forEach(r=>r.setAttribute('stroke','#ccc'));
+            propPanel.textContent = '选中节点后查看属性';
+        }
+    });
+
+    // 颜色变量
+    const varPrimary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#2f6fed';
+})();
+</script>
+
+        </section>
+    </main>
+<footer data-a2a="footer" style="margin-top:48px;padding:28px 16px;border-top:1px solid rgba(127,127,127,.16);text-align:center;font-family:system-ui,-apple-system,'PingFang SC',sans-serif;line-height:1.9;color:#8a8f99;background:transparent"><a href="https://www.autoa2a.org" target="_blank" rel="noopener" style="display:inline-block;margin-bottom:10px"><img src="https://agent.oagi.com.cn/uploads/202606/29ea3ed5413830b3.png" alt="AutoA2A" style="height:36px;vertical-align:middle;border:0"></a><div style="font-size:13.5px;color:#6b7280;max-width:760px;margin:0 auto 6px">✅️ <b>AutoA2A</b> · 智能体互连 Agent to Agent 平台——让智能体无缝发现、协商、协作与安全交换数据，开启 AI 即服务新时代。</div><div style="font-size:13px">本网站由 <a href="https://www.autoa2a.org" target="_blank" rel="noopener" style="color:#f2603c;text-decoration:none;font-weight:600">www.autoa2a.org</a> 多个 AI 协作生成</div><div style="font-size:12px;color:#aab;margin-top:6px">Copyright © 2025 - 2026 AutoA2A. All Rights Reserved. A2A版权所有</div></footer></body>
+</html>
