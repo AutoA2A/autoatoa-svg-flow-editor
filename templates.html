@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模板库</title>
+    <style>
+        :root{
+            --primary:#2f6fed;
+            --accent:#f5a623;
+            --font-family:"Helvetica Neue",Arial,sans-serif;
+            --spacing:8px;
+        }
+        body{
+            margin:0;
+            font-family:var(--font-family);
+            color:#333;
+            background:#f0f2f5;
+        }
+        a{
+            color:inherit;
+            text-decoration:none;
+        }
+        header{
+            background:var(--primary);
+            color:#fff;
+            padding:calc(var(--spacing)*2);
+        }
+        .nav{
+            display:flex;
+            flex-wrap:wrap;
+            gap:calc(var(--spacing)*2);
+        }
+        .nav a{
+            padding:calc(var(--spacing)*0.5) calc(var(--spacing)*1);
+            border-radius:4px;
+            transition:background .2s;
+        }
+        .nav a:hover{
+            background:rgba(255,255,255,0.2);
+        }
+        .container{
+            max-width:1200px;
+            margin:0 auto;
+            padding:calc(var(--spacing)*2);
+        }
+        .content{
+            display:grid;
+            gap:calc(var(--spacing)*2);
+        }
+        @media (min-width:600px){
+            .content{
+                grid-template-columns:repeat(2,1fr);
+            }
+        }
+        @media (min-width:900px){
+            .content{
+                grid-template-columns:repeat(3,1fr);
+            }
+        }
+        .card{
+            background:#fff;
+            border-radius:8px;
+            box-shadow:0 2px 6px rgba(0,0,0,0.1);
+            padding:calc(var(--spacing)*2);
+        }
+        .btn{
+            background:var(--primary);
+            color:#fff;
+            border:none;
+            border-radius:4px;
+            padding:8px 16px;
+            cursor:pointer;
+            font-family:inherit;
+        }
+        .btn:hover{
+            background:#2559c4;
+        }
+    </style>
+<meta name="description" content="展示预设流程模板，点击加载到编辑器。"><meta name="keywords" content="SVG,流程图,编辑器,拖拽,属性面板,导出,前端"><meta name="robots" content="index,follow,max-image-preview:large"><meta property="og:type" content="website"><meta property="og:title" content="模板库"><meta property="og:description" content="展示预设流程模板，点击加载到编辑器。"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="模板库"><meta name="twitter:description" content="展示预设流程模板，点击加载到编辑器。"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"模板库","description":"展示预设流程模板，点击加载到编辑器。","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"}}</script><style data-a2a="basecss">*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,canvas,svg,video,table{max-width:100%;height:auto}pre,code{white-space:pre-wrap;word-break:break-word}[data-a2a="header"]{width:100%}@media(max-width:640px){body{font-size:15px}}</style></head>
+<body>
+    <header>
+        <nav class="nav">
+            <a href="index.html">流程图编辑器</a>
+            <a href="templates.html">模板库</a>
+            <a href="export.html">导出与保存</a>
+            <a href="about.html">关于本编辑器</a>
+            <a href="settings.html">全局设置</a>
+            <a href="shortcuts.html">快捷键指南</a>
+            <a href="help.html">使用帮助</a>
+            <a href="feedback.html">反馈与建议</a>
+        </nav>
+    </header>
+    <main class="container">
+        <section class="content">
+            
+<article class="card">
+    <h3 class="card-title" style="margin-top:0; margin-bottom:var(--spacing);">审批流程</h3>
+    <p>包含提交、审核、批准三个节点的标准审批流程。</p>
+    <button class="btn" data-template='{"nodes":[{"id":"n1","type":"start","x":100,"y":80},{"id":"n2","type":"task","label":"提交","x":300,"y":80},{"id":"n3","type":"task","label":"审核","x":500,"y":80},{"id":"n4","type":"task","label":"批准","x":700,"y":80},{"id":"n5","type":"end","x":900,"y":80}],"edges":[{"from":"n1","to":"n2"},{"from":"n2","to":"n3"},{"from":"n3","to":"n4"},{"from":"n4","to":"n5"}]}' onclick="location.href='index.html?id=approval'">加载到编辑器</button>
+</article>
+
+<article class="card">
+    <h3 class="card-title" style="margin-top:0; margin-bottom:var(--spacing);">用户注册流程</h3>
+    <p>从填写信息到邮件验证的完整注册路径。</p>
+    <button class="btn" data-template='{"nodes":[{"id":"n1","type":"start","x":100,"y":80},{"id":"n2","type":"task","label":"填写信息","x":300,"y":80},{"id":"n3","type":"task","label":"提交","x":500,"y":80},{"id":"n4","type":"task","label":"邮件验证","x":700,"y":80},{"id":"n5","type":"end","x":900,"y":80}],"edges":[{"from":"n1","to":"n2"},{"from":"n2","to":"n3"},{"from":"n3","to":"n4"},{"from":"n4","to":"n5"}]}' onclick="location.href='index.html?id=register'">加载到编辑器</button>
+</article>
+
+<article class="card">
+    <h3 class="card-title" style="margin-top:0; margin-bottom:var(--spacing);">故障处理流程</h3>
+    <p>用于快速定位、报告并解决系统故障的标准流程。</p>
+    <button class="btn" data-template='{"nodes":[{"id":"n1","type":"start","x":100,"y":80},{"id":"n2","type":"task","label":"故障报告","x":300,"y":80},{"id":"n3","type":"task","label":"诊断","x":500,"y":80},{"id":"n4","type":"task","label":"修复","x":700,"y":80},{"id":"n5","type":"end","x":900,"y":80}],"edges":[{"from":"n1","to":"n2"},{"from":"n2","to":"n3"},{"from":"n3","to":"n4"},{"from":"n4","to":"n5"}]}' onclick="location.href='index.html?id=troubleshoot'">加载到编辑器</button>
+</article>
+
+        </section>
+    </main>
+<footer data-a2a="footer" style="margin-top:48px;padding:28px 16px;border-top:1px solid rgba(127,127,127,.16);text-align:center;font-family:system-ui,-apple-system,'PingFang SC',sans-serif;line-height:1.9;color:#8a8f99;background:transparent"><a href="https://www.autoa2a.org" target="_blank" rel="noopener" style="display:inline-block;margin-bottom:10px"><img src="https://agent.oagi.com.cn/uploads/202606/29ea3ed5413830b3.png" alt="AutoA2A" style="height:36px;vertical-align:middle;border:0"></a><div style="font-size:13.5px;color:#6b7280;max-width:760px;margin:0 auto 6px">✅️ <b>AutoA2A</b> · 智能体互连 Agent to Agent 平台——让智能体无缝发现、协商、协作与安全交换数据，开启 AI 即服务新时代。</div><div style="font-size:13px">本网站由 <a href="https://www.autoa2a.org" target="_blank" rel="noopener" style="color:#f2603c;text-decoration:none;font-weight:600">www.autoa2a.org</a> 多个 AI 协作生成</div><div style="font-size:12px;color:#aab;margin-top:6px">Copyright © 2025 - 2026 AutoA2A. All Rights Reserved. A2A版权所有</div></footer></body>
+</html>
